@@ -1,0 +1,111 @@
+.news-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    padding: 20px;
+}
+
+.news-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    width: 300px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+}
+
+.news-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+
+.news-card-content {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.news-card-title {
+    font-size: 18px;
+    margin: 0 0 10px;
+}
+
+.news-card-description {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 10px;
+    flex: 1;
+}
+
+.news-card-footer {
+    margin-top: auto;
+}
+
+.news-card a {
+    text-decoration: none;
+    color: #007BFF;
+    font-weight: bold;
+}
+.container{  
+    text-align: center;    
+    width: 1500px;  
+    height: 30px;  
+    padding-top: 10px;
+    padding-bottom: 10px;  
+}  
+#btn{  
+    font-size: 25px;  
+}  
+.category {
+background-color: white;
+border: 2px solid black;
+color: black;
+padding: 10px 32px;
+text-align: center;
+text-decoration: none;
+display: inline-block;
+font-size: 16px;
+margin: 4px 2px;
+cursor: pointer;
+}
+.search-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px;
+}
+#search-input {
+    width:  1200px;
+    padding: 10px;
+    border: 2px solid black;
+    border-radius: 4px 0 0 4px;
+    font-size: 16px;
+    outline: none;
+}
+.bookmarks-button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: 2px solid black;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 15px;
+}
+.addbookmark-button {
+    background-color: #f87c5d;
+    border: none;
+    padding: 8px 12px;
+    color: white;
+    cursor: pointer;
+    border-radius: 4px;
+    font-weight: bold;
+}
+.addbookmark-button:active {
+    background-color: #007bff;
+    transform: translateY(4px);
+}
