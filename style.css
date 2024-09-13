@@ -105,7 +105,3 @@ cursor: pointer;
     border-radius: 4px;
     font-weight: bold;
 }
-.addbookmark-button:active {
-    background-color: #007bff;
-    transform: translateY(4px);
-}
