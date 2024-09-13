@@ -1,8 +1,8 @@
 let buttons = document.querySelectorAll('.category');
 const buttonBookmarks = document.querySelector('.bookmarks-button');
 let newsData = [];
-let bookmarkedArticles = [];
 let displayedData = [];
+let bookmarkedArticles = [];
 //Async function that fetches news data from the API
 async function fetchNews() {
     let category = this.innerHTML;
