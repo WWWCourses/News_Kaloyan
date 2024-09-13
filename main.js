@@ -57,7 +57,6 @@ function createNewsCard(article) {
         if (displayedData === bookmarkedArticles) {
             displayBookmarks();
         } else {
-            // Otherwise, refresh the current news view
             displayNewsCards(displayedData);
         }      
     })
