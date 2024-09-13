@@ -3,16 +3,8 @@ const buttonBookmarks = document.querySelector('.bookmarks-button');
 let newsData = [];
 let bookmarkedArticles = [];
 let displayedData = [];
-
-function isBookmarked(article) {
-    return bookmarkedArticles.some(bookmarked => bookmarked.url === article.url);
-}
-
-for (let i = 0; i < buttons.length; i++) {
-    buttons[i].addEventListener('click', functionasyns);
-}
-
-async function functionasyns() {
+//Async function that fetches news data from the API
+async function fetchNews() {
     let category = this.innerHTML;
     const response = await fetch(`https://newsapi.org/v2/top-headlines?country=us&category=${category}&apiKey=8fb69ffaae4541d4b23735b94523dc64`);
     const json = await response.json();
@@ -20,6 +12,7 @@ async function functionasyns() {
     displayedData = newsData;
     displayNewsCards(newsData);
 }
+//Creates news cards from the news data given
 function createNewsCard(article) {
     const card = document.createElement('div');
     card.className = 'news-card';
@@ -52,7 +45,7 @@ function createNewsCard(article) {
     } else {
         addbookmarkButton.textContent = 'Bookmark';
     }
-
+//When the button is clicked the function adds article to bookmarks or removes it while changing the text content accordingly
     addbookmarkButton.addEventListener('click', () => {
         if (isBookmarked(article)) {
             unbookmarkArticle(article);
@@ -64,8 +57,9 @@ function createNewsCard(article) {
         if (displayedData === bookmarkedArticles) {
             displayBookmarks();
         } else {
+            // Otherwise, refresh the current news view
             displayNewsCards(displayedData);
-        }
+        }      
     })
     cardContent.appendChild(title);
     cardContent.appendChild(description);
@@ -77,7 +71,7 @@ function createNewsCard(article) {
 
     return card;
 }
-
+//displays news cards in the news-container 
 function displayNewsCards(newsData) {
     const newsContainer = document.getElementById('news-container');
     newsContainer.innerHTML = '';
@@ -88,8 +82,15 @@ function displayNewsCards(newsData) {
     });
 }
 
-document.getElementById('search-input').addEventListener('keyup', filterNews);
-
+//Checks if an article is bookmarked or not
+function isBookmarked(article) {
+    return bookmarkedArticles.some(bookmarked => bookmarked.url === article.url);
+}
+//Iterates through the categories
+for (let i = 0; i < buttons.length; i++) {
+    buttons[i].addEventListener('click', fetchNews);
+}
+//filter news while typing on the search bar
 function filterNews() {
     const query = document.getElementById('search-input').value.toLowerCase();
     const filteredNews = displayedData.filter(article => {
@@ -105,13 +106,13 @@ function filterNews() {
     });
     displayNewsCards(filteredNews);
 }
-
+//Function that adds articles to the bookmarkarticles array
 function bookmarkArticle(article) {
     if (!isBookmarked(article)) {
         bookmarkedArticles.push(article);
     }
 }
-
+//Removes article from the bookmarkedArticles array and checks if an article is already bookmarked
 function unbookmarkArticle(article) {
     bookmarkedArticles = bookmarkedArticles.filter(bookmarked => bookmarked.url !== article.url);
 
@@ -122,10 +123,10 @@ function unbookmarkArticle(article) {
         return item;
     });
 }
-
+//Displays bookmarks that are in the array
 function displayBookmarks() {
     displayedData = bookmarkedArticles
     displayNewsCards(bookmarkedArticles)
 }
-
-buttonBookmarks.addEventListener('click', displayBookmarks)
+document.getElementById('search-input').addEventListener('keyup', filterNews);
+buttonBookmarks.addEventListener('click', displayBookmarks) //When the Bookmarks button is clicked articles from the bookmarks array are displayed
