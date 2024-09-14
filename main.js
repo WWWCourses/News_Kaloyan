@@ -1,8 +1,3 @@
-let buttons = document.querySelectorAll('.category');
-const buttonBookmarks = document.querySelector('.bookmarks-button');
-let newsData = [];
-let displayedData = [];
-let bookmarkedArticles = [];
 //Async function that fetches news data from the API
 async function fetchNews() {
     let category = this.innerHTML;
@@ -45,7 +40,7 @@ function createNewsCard(article) {
     } else {
         addbookmarkButton.textContent = 'Bookmark';
     }
-//When the button is clicked the function adds article to bookmarks or removes it while changing the text content accordingly
+    //When the button is clicked the function adds article to bookmarks or removes it while changing the text content accordingly
     addbookmarkButton.addEventListener('click', () => {
         if (isBookmarked(article)) {
             unbookmarkArticle(article);
@@ -58,7 +53,7 @@ function createNewsCard(article) {
             displayBookmarks();
         } else {
             displayNewsCards(displayedData);
-        }      
+        }
     })
     cardContent.appendChild(title);
     cardContent.appendChild(description);
@@ -70,7 +65,7 @@ function createNewsCard(article) {
 
     return card;
 }
-//displays news cards in the news-container 
+//displays news cards in the news-container
 function displayNewsCards(newsData) {
     const newsContainer = document.getElementById('news-container');
     newsContainer.innerHTML = '';
@@ -80,14 +75,9 @@ function displayNewsCards(newsData) {
         newsContainer.appendChild(newsCard);
     });
 }
-
 //Checks if an article is bookmarked or not
 function isBookmarked(article) {
     return bookmarkedArticles.some(bookmarked => bookmarked.url === article.url);
-}
-//Iterates through the categories
-for (let i = 0; i < buttons.length; i++) {
-    buttons[i].addEventListener('click', fetchNews);
 }
 //filter news while typing on the search bar
 function filterNews() {
@@ -127,5 +117,17 @@ function displayBookmarks() {
     displayedData = bookmarkedArticles
     displayNewsCards(bookmarkedArticles)
 }
+
+let buttons = document.querySelectorAll('.category');
+const buttonBookmarks = document.querySelector('.bookmarks-button');
+let newsData = [];
+let displayedData = [];
+let bookmarkedArticles = [];
+
 document.getElementById('search-input').addEventListener('keyup', filterNews);
 buttonBookmarks.addEventListener('click', displayBookmarks) //When the Bookmarks button is clicked articles from the bookmarks array are displayed
+
+//Iterates through the categories
+for (let i = 0; i < buttons.length; i++) {
+    buttons[i].addEventListener('click', fetchNews);
+}
