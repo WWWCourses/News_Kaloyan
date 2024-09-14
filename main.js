@@ -4,7 +4,6 @@ async function fetchNews() {
     const response = await fetch(`https://newsapi.org/v2/top-headlines?country=us&category=${category}&apiKey=8fb69ffaae4541d4b23735b94523dc64`);
     const json = await response.json();
     newsData = json.articles;
-    displayedData = newsData;
     displayNewsCards(newsData);
 }
 //Creates news cards from the news data given
@@ -42,19 +41,19 @@ function createNewsCard(article) {
     }
     //When the button is clicked the function adds article to bookmarks or removes it while changing the text content accordingly
     addbookmarkButton.addEventListener('click', () => {
-        if (isBookmarked(article)) {
+        if (article.bookmarked) {
             unbookmarkArticle(article);
             addbookmarkButton.textContent = 'Bookmark';
         } else {
             bookmarkArticle(article);
             addbookmarkButton.textContent = 'Unbookmark';
         }
-        if (displayedData === bookmarkedArticles) {
-            displayBookmarks();
-        } else {
-            displayNewsCards(displayedData);
+        // if we're in bookmarks view:
+        if (isBookmarksView) {
+            displayNewsCards(bookmarkedArticles);
         }
-    })
+    });
+
     cardContent.appendChild(title);
     cardContent.appendChild(description);
     cardContent.appendChild(readMore);
@@ -65,22 +64,11 @@ function createNewsCard(article) {
 
     return card;
 }
-//displays news cards in the news-container
-function displayNewsCards(newsData) {
-    const newsContainer = document.getElementById('news-container');
-    newsContainer.innerHTML = '';
-
-    newsData.forEach(article => {
-        const newsCard = createNewsCard(article);
-        newsContainer.appendChild(newsCard);
-    });
-}
-//Checks if an article is bookmarked or not
-function isBookmarked(article) {
-    return bookmarkedArticles.some(bookmarked => bookmarked.url === article.url);
-}
 //filter news while typing on the search bar
 function filterNews() {
+    // if we are in BookmarksView we work with bookmarkedArticles; else with newsData
+    let displayedData = isBookmarksView?bookmarkedArticles:newsData;
+
     const query = document.getElementById('search-input').value.toLowerCase();
     const filteredNews = displayedData.filter(article => {
         let title = '';
@@ -95,37 +83,57 @@ function filterNews() {
     });
     displayNewsCards(filteredNews);
 }
-//Function that adds articles to the bookmarkarticles array
-function bookmarkArticle(article) {
-    if (!isBookmarked(article)) {
-        bookmarkedArticles.push(article);
-    }
-}
-//Removes article from the bookmarkedArticles array and checks if an article is already bookmarked
-function unbookmarkArticle(article) {
-    bookmarkedArticles = bookmarkedArticles.filter(bookmarked => bookmarked.url !== article.url);
+//displays news cards in the news-container
+function displayNewsCards(newsData) {
+    newsContainer.innerHTML = '';
 
-    displayedData = displayedData.map(item => {
-        if (item.url === article.url) {
-            item.bookmarked = false
-        }
-        return item;
+    newsData.forEach(article => {
+        const newsCard = createNewsCard(article);
+        newsContainer.appendChild(newsCard);
     });
 }
-//Displays bookmarks that are in the array
-function displayBookmarks() {
-    displayedData = bookmarkedArticles
-    displayNewsCards(bookmarkedArticles)
+
+//Checks if an article is bookmarked or not
+function isBookmarked(article) {
+    return article.bookmarked === true;
 }
+//Function that adds articles to the bookmarkarticles array and mark it as bookmarked
+function bookmarkArticle(article) {
+    article.bookmarked = true;
+    bookmarkedArticles.push(article);
+}
+//Removes article from the bookmarkedArticles array and mark it as unbookmarked
+function unbookmarkArticle(article) {
+    article.bookmarked = false;
+    bookmarkedArticles = bookmarkedArticles.filter(bookmarked => bookmarked.url !== article.url);
+}
+// Toggle between Bookmarks/Articles View
+function toggleBookmarks() {
+    if(isBookmarksView){
+        // we are in a bookmarks view => change to articles view
+        displayNewsCards(newsData);
+        buttonBookmarks.textContent = 'Show Bookmarks';
+        isBookmarksView = false;
+    }else{
+        // we are in a articles view => change to bookmarks view
+        displayNewsCards(bookmarkedArticles);
+        buttonBookmarks.textContent = 'Hide Bookmarks';
+        isBookmarksView = true;
+    }
+}
+
+
 
 let buttons = document.querySelectorAll('.category');
 const buttonBookmarks = document.querySelector('.bookmarks-button');
+const newsContainer = document.getElementById('news-container');
+
 let newsData = [];
-let displayedData = [];
 let bookmarkedArticles = [];
+let isBookmarksView = false;  // Flag to track if we're in the bookmarks view
 
 document.getElementById('search-input').addEventListener('keyup', filterNews);
-buttonBookmarks.addEventListener('click', displayBookmarks) //When the Bookmarks button is clicked articles from the bookmarks array are displayed
+buttonBookmarks.addEventListener('click', toggleBookmarks) //When the Bookmarks button is clicked articles from the bookmarks array are displayed
 
 //Iterates through the categories
 for (let i = 0; i < buttons.length; i++) {
